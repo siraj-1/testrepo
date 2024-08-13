@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/utils/todolist.dart';
 
-class Home_page extends StatefulWidget {
-  const Home_page({super.key});
+class HomePage extends StatefulWidget {
+  HomePage({super.key});
 
   @override
-  State<Home_page> createState() => _Home_pageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _Home_pageState extends State<Home_page> {
+class _HomePageState extends State<HomePage> {
   final _controller = TextEditingController();
   List toDoList = [
     ['Code With Otabek', true],
@@ -18,18 +18,22 @@ class _Home_pageState extends State<Home_page> {
   ];
 
   void checkBoxChanged(int index) {
+    // for theheck box (to know if the task are finished or not)
     setState(() {
-      toDoList[index][1] == !toDoList[index][1];
+      toDoList[index][1] = !toDoList[index][1];
     });
   }
 
   void saveNewTask() {
+    // to add a new task to the list
     setState(() {
       toDoList.add([_controller.text, false]);
+      _controller.clear();
     });
   }
 
-  void deletefun(int index) {
+  void deleteTask(int index) {
+    // delete a task from the list
     setState(() {
       toDoList.removeAt(index);
     });
@@ -40,25 +44,60 @@ class _Home_pageState extends State<Home_page> {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade300,
       appBar: AppBar(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
         title: const Text(
           'Simple Todo',
         ),
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
-        centerTitle: true,
-      ), //the title of the todo is finished ;
+      ),
       body: ListView.builder(
         itemCount: toDoList.length,
         itemBuilder: (BuildContext context, index) {
-          return ToDoList(
+          return TodoList(
             taskName: toDoList[index][0],
             taskCompleted: toDoList[index][1],
-            onchange: (value) => checkBoxChanged(index),
-            deletefun: (context) => deletefun(index),
+            onChanged: (value) => checkBoxChanged(index),
+            deleteFunction: (contex) => deleteTask(index),
           );
         },
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: 'Add a new todo items',
+                    filled: true,
+                    fillColor: Colors.deepPurple.shade200,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.deepPurple,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.deepPurple,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            FloatingActionButton(
+              onPressed: saveNewTask,
+              child: const Icon(Icons.add),
+            ),
+          ],
+        ),
       ),
     );
   }

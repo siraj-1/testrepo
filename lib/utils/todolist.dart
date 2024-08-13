@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class ToDoList extends StatelessWidget {
-  const ToDoList({
+class TodoList extends StatelessWidget {
+  const TodoList({
     super.key,
     required this.taskName,
     required this.taskCompleted,
-    required this.onchange,
-    required this.deletefun,
+    required this.onChanged,
+    required this.deleteFunction,
   });
+
   final String taskName;
   final bool taskCompleted;
-  final Function(bool?)? onchange;
-  final Function(BuildContext)? deletefun;
+  final Function(bool?)? onChanged;
+  final Function(BuildContext)? deleteFunction;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,7 +29,7 @@ class ToDoList extends StatelessWidget {
           motion: StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: deletefun,
+              onPressed: deleteFunction,
               icon: Icons.delete,
               borderRadius: BorderRadius.circular(15),
             ),
@@ -43,7 +45,7 @@ class ToDoList extends StatelessWidget {
             children: [
               Checkbox(
                 value: taskCompleted,
-                onChanged: onchange,
+                onChanged: onChanged,
                 checkColor: Colors.black,
                 activeColor: Colors.white,
                 side: const BorderSide(
